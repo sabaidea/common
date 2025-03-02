@@ -1,4 +1,4 @@
-module github.com/Ehsan-Eghbali/common
+module github.com/sabaidea/common
 
 go 1.23.3
 
