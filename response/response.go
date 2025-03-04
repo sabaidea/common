@@ -32,17 +32,24 @@ type ErrResponse struct {
 	Timestamp string `json:"timestamp"`
 }
 
+type ErrResponseParams struct {
+	Code      int
+	Error     error
+	Message   string
+	ErrorCode string
+}
+
 // NewErrorResponse constructs a standardized error response.
-func NewErrorResponse(code int, err error, msg string, traceID string) ErrResponse {
+func NewErrorResponse(p ErrResponseParams) ErrResponse {
 	reason := "internal server error"
-	if err != nil {
-		reason = err.Error()
+	if p.Error != nil {
+		reason = p.Error.Error()
 	}
 	return ErrResponse{
-		Code:      code,
+		Code:      p.Code,
 		Reason:    reason,
-		Message:   msg,
-		ErrorCode: traceID,
+		Message:   p.Message,
+		ErrorCode: p.ErrorCode,
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
 }
@@ -57,7 +64,12 @@ func RespondWithError(p RespondWithErrorParams) {
 	p.Writer.Header().Set("Content-Type", "application/json")
 	p.Writer.WriteHeader(p.StatusCode)
 
-	response := NewErrorResponse(p.StatusCode, p.Error, p.Message, p.TraceID)
+	response := NewErrorResponse(ErrResponseParams{
+		Code:      p.StatusCode,
+		Error:     p.Error,
+		Message:   p.Message,
+		ErrorCode: p.TraceID,
+	})
 
 	if err := json.NewEncoder(p.Writer).Encode(map[string]interface{}{
 		"error": response,
