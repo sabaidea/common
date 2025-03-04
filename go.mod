@@ -1,4 +1,4 @@
-module github.com/sabaidea/common
+module github.com/sabaidea/common/v2
 
 go 1.23.3
 
