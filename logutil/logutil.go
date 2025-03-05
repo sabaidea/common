@@ -17,11 +17,11 @@ var (
 )
 
 // Struct to hold additional fields
+
 type LogFields struct {
 	Event         string                 `json:"event,omitempty"`
 	CorrelationID string                 `json:"correlationID,omitempty"`
-	Timestamp     string                 `json:"timestamp,omitempty"`
-	Status        string                 `json:"status,omitempty"`
+	StatusCode    int                    `json:"status_code,omitempty"`
 	Error         error                  `json:"error,omitempty"`
 	Additional    map[string]interface{} `json:"additional,omitempty"`
 }
@@ -51,14 +51,11 @@ func LogRelationalStart(fields *LogFields) *logrus.Entry {
 		return nil
 	}
 
-	fields.Timestamp = time.Now().UTC().Format(time.RFC3339)
-	fields.Status = "started"
-
 	entry := logrus.WithFields(logrus.Fields{
 		"event":         fields.Event,
 		"correlationID": fields.CorrelationID,
-		"timestamp":     fields.Timestamp,
-		"status":        fields.Status,
+		"timestamp":     getTimeStamp(),
+		"status_code":   fields.StatusCode,
 	})
 	mergeFields(entry, fields.Additional)
 
@@ -72,14 +69,11 @@ func LogRelationalEnd(fields *LogFields) *logrus.Entry {
 		return nil
 	}
 
-	fields.Timestamp = time.Now().UTC().Format(time.RFC3339)
-	fields.Status = "completed"
-
 	entry := logrus.WithFields(logrus.Fields{
 		"event":         fields.Event,
 		"correlationID": fields.CorrelationID,
-		"timestamp":     fields.Timestamp,
-		"status":        fields.Status,
+		"timestamp":     getTimeStamp(),
+		"status_code":   fields.StatusCode,
 	})
 	mergeFields(entry, fields.Additional)
 
@@ -89,15 +83,13 @@ func LogRelationalEnd(fields *LogFields) *logrus.Entry {
 
 // LogError logs an error event regardless of debug mode using struct
 func LogError(fields *LogFields) {
-	fields.Timestamp = time.Now().UTC().Format(time.RFC3339)
-	fields.Status = "error"
 
 	entry := logrus.WithFields(logrus.Fields{
 		"event":         fields.Event,
 		"correlationID": fields.CorrelationID,
-		"timestamp":     fields.Timestamp,
+		"timestamp":     getTimeStamp(),
 		"error":         fields.Error.Error(),
-		"status":        fields.Status,
+		"status_code":   fields.StatusCode,
 	})
 	mergeFields(entry, fields.Additional)
 
@@ -114,10 +106,9 @@ func LogOnce(fields *LogFields) {
 		return
 	}
 
-	fields.Timestamp = time.Now().UTC().Format(time.RFC3339)
 	entry := logrus.WithFields(logrus.Fields{
 		"event":     fields.Event,
-		"timestamp": fields.Timestamp,
+		"timestamp": getTimeStamp(),
 	})
 	mergeFields(entry, fields.Additional)
 
@@ -135,11 +126,9 @@ func LogSuccess(fields *LogFields) {
 		return
 	}
 
-	fields.Timestamp = time.Now().UTC().Format(time.RFC3339)
-
 	entry := logrus.WithFields(logrus.Fields{
 		"event":     fields.Event,
-		"timestamp": fields.Timestamp,
+		"timestamp": getTimeStamp(),
 	})
 	mergeFields(entry, fields.Additional)
 
@@ -154,4 +143,8 @@ func mergeFields(entry *logrus.Entry, additionalFields map[string]interface{}) {
 			entry = entry.WithField(k, v)
 		}
 	}
+}
+
+func getTimeStamp() string {
+	return time.Now().UTC().Format(time.RFC3339)
 }
