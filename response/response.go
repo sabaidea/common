@@ -55,7 +55,7 @@ func NewErrorResponse(p ErrResponseParams) ErrResponse {
 }
 
 // RespondWithError sends a standardized JSON error response.
-func RespondWithError(p RespondWithErrorParams) {
+func RespondWithError(p *RespondWithErrorParams) {
 	if err := p.validate(); err != nil {
 		http.Error(p.Writer, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -79,7 +79,7 @@ func RespondWithError(p RespondWithErrorParams) {
 }
 
 // RespondWithSuccess sends a standardized JSON success response.
-func RespondWithSuccess(p RespondWithSuccessParams) {
+func RespondWithSuccess(p *RespondWithSuccessParams) {
 	if err := p.validate(); err != nil {
 		http.Error(p.Writer, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -92,7 +92,7 @@ func RespondWithSuccess(p RespondWithSuccessParams) {
 	}
 }
 
-func (p RespondWithErrorParams) validate() error {
+func (p *RespondWithErrorParams) validate() error {
 	if p.Writer == nil {
 		return errors.New("writer is required")
 	}
@@ -108,7 +108,7 @@ func (p RespondWithErrorParams) validate() error {
 	return nil
 }
 
-func (p RespondWithSuccessParams) validate() error {
+func (p *RespondWithSuccessParams) validate() error {
 	if p.Writer == nil {
 		return errors.New("writer is required")
 	}
