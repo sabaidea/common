@@ -149,6 +149,7 @@ func LogSuccess(fields *LogFields) {
 
 // mergeFields merges additional fields into the base log fields (for LogFields struct)
 func mergeFields(entry *logrus.Entry, additionalFields map[string]interface{}) *logrus.Entry {
+	// Generally, do this if additionalFields is itself a value you want to log,
+	// rather than its contents.
 	return entry.WithField("additionalFields", additionalFields)
-
 }
