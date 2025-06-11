@@ -1,7 +1,6 @@
 package logutil
 
 import (
-	"fmt"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"os"
@@ -30,11 +29,8 @@ type LogFields struct {
 // Init initializes the logrus logger with JSON formatting and INFO level
 func Init() {
 	env := os.Getenv("BART_ENV")
-	fmt.Println("📣 BART_ENV =", env) // 👈 اضافه کن
 
 	if env == "local" {
-		fmt.Println("✅ Setting TextFormatter") // 👈 اضافه کن
-
 		logrus.SetFormatter(&logrus.TextFormatter{
 			FullTimestamp:   true,
 			ForceColors:     true,
@@ -42,8 +38,6 @@ func Init() {
 			DisableQuote:    true,
 		})
 	} else {
-		fmt.Println("📦 Setting JSONFormatter") // 👈 اضافه کن
-
 		logrus.SetFormatter(&logrus.JSONFormatter{
 			TimestampFormat: time.RFC3339,
 			PrettyPrint:     false,
