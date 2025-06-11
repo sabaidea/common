@@ -32,10 +32,13 @@ func Init() {
 
 	if env == "local" {
 		logrus.SetFormatter(&logrus.TextFormatter{
-			FullTimestamp:   true,
-			ForceColors:     true,
-			TimestampFormat: time.RFC3339,
-			DisableQuote:    true,
+			FullTimestamp:             true,
+			ForceColors:               true,
+			TimestampFormat:           time.RFC3339,
+			DisableQuote:              true,
+			DisableLevelTruncation:    true,
+			PadLevelText:              true,
+			EnvironmentOverrideColors: false,
 		})
 	} else {
 		logrus.SetFormatter(&logrus.JSONFormatter{
@@ -106,7 +109,8 @@ func LogError(fields *LogFields) {
 	})
 	mergeFields(entry, fields.Additional)
 
-	entry.Error("Error occurred")
+	entry.Errorf("❌ %s - Error occurred", fields.Event)
+
 }
 
 // LogOnce logs an event only once to prevent duplicate logs using struct
@@ -125,7 +129,7 @@ func LogOnce(fields *LogFields) {
 	})
 	mergeFields(entry, fields.Additional)
 
-	entry.Info("Event logged once")
+	entry.Infof("📌 %s - Event logged once", fields.Event)
 	loggedEvents[logKey] = true
 }
 
@@ -145,7 +149,7 @@ func LogSuccess(fields *LogFields) {
 	})
 	mergeFields(entry, fields.Additional)
 
-	entry.Info("Event logged successfully")
+	entry.Infof("✅ %s - Event logged successfully", fields.Event)
 	loggedEvents[logKey] = true
 }
 
