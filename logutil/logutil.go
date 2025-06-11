@@ -20,14 +20,24 @@ var (
 
 type LogFields struct {
 	Event         string                 `json:"event,omitempty"`
-	CorrelationID string                 `json:"correlationID,omitempty"`
-	StatusCode    int                    `json:"status_code,omitempty"`
 	Error         error                  `json:"error,omitempty"`
 	Additional    map[string]interface{} `json:"additional,omitempty"`
+	StatusCode    int                    `json:"status_code,omitempty"`
+	CorrelationID string                 `json:"correlationID,omitempty"`
 }
 
 // Init initializes the logrus logger with JSON formatting and INFO level
 func Init() {
+	env := os.Getenv("BART_ENV")
+
+	if env == "local" {
+		logrus.SetFormatter(&logrus.TextFormatter{
+			FullTimestamp:   true,
+			ForceColors:     true,
+			TimestampFormat: time.RFC3339,
+			DisableQuote:    true,
+		})
+	}
 	logrus.SetFormatter(&logrus.JSONFormatter{
 		TimestampFormat: time.RFC3339,
 	})
