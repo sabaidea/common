@@ -1,4 +1,4 @@
-package mq
+package messages
 
 type ReceiverType string
 
