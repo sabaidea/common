@@ -1,4 +1,4 @@
-package mq
+package messages
 
 type Action string
 
