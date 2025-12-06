@@ -7,16 +7,16 @@ import (
 
 // Core application/domain errors
 var (
-	ErrEmpty          = errors.New("empty")
-	ErrDuplicateEntry = errors.New("duplicate entry")
-	ErrNotFound       = errors.New("not found")
-	ErrInvalidInput   = errors.New("invalid input")
-	ErrUnauthorized   = errors.New("unauthorized")
-	ErrForbidden      = errors.New("forbidden")
-	ErrTooMany        = errors.New("too many requests")
-	ErrUnavailable    = errors.New("service unavailable")
-	ErrTimeout        = errors.New("timeout")
-	ErrInternal       = errors.New("internal error")
+	ErrEmpty          = errors.New("EMPTY")
+	ErrDuplicateEntry = errors.New("DUPLICATE_ENTRY")
+	ErrNotFound       = errors.New("NOT_FOUND")
+	ErrInvalidInput   = errors.New("INVALID_INPUT")
+	ErrUnauthorized   = errors.New("UNAUTHORIZED")
+	ErrForbidden      = errors.New("FORBIDDEN")
+	ErrTooMany        = errors.New("TOO_MANY_REQUESTS")
+	ErrUnavailable    = errors.New("SERVICE_UNAVAILABLE")
+	ErrTimeout        = errors.New("TIMEOUT")
+	ErrInternal       = errors.New("INTERNAL_ERROR")
 )
 
 func NewErrEmpty(msg string) error {
