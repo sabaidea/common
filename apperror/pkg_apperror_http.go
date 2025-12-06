@@ -17,22 +17,20 @@ func HTTPStatus(err error) int {
 	}
 
 	switch {
-	case errors.Is(err, ErrDuplicateEntry):
-		return http.StatusConflict // 409
-	case errors.Is(err, ErrNotFound):
-		return http.StatusNotFound // 404
 	case errors.Is(err, ErrInvalidInput):
 		return http.StatusBadRequest // 400
-	case isInvalidInput(err):
+	case errors.Is(err, ErrEmpty):
 		return http.StatusBadRequest // 400
-	case errors.Is(err, ErrEmptyPhoneNumber),
-		errors.Is(err, ErrInvalidPhoneNumber),
-		errors.Is(err, ErrTooLongPhoneNumber):
+	case isInvalidInput(err):
 		return http.StatusBadRequest // 400
 	case errors.Is(err, ErrUnauthorized):
 		return http.StatusUnauthorized // 401
 	case errors.Is(err, ErrForbidden):
 		return http.StatusForbidden // 403
+	case errors.Is(err, ErrNotFound):
+		return http.StatusNotFound // 404
+	case errors.Is(err, ErrDuplicateEntry):
+		return http.StatusConflict // 409
 	case errors.Is(err, ErrTooMany):
 		return http.StatusTooManyRequests // 429
 	case errors.Is(err, ErrInternal):
