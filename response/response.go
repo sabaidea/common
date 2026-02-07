@@ -22,6 +22,7 @@ type RespondWithSuccessParams struct {
 	Writer     http.ResponseWriter
 	StatusCode int
 	Data       interface{}
+	TraceID    string
 }
 
 type ErrResponse struct {
